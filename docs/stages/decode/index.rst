@@ -30,18 +30,13 @@ __ riscv-specs_
 .. todo:: Add immediate encoding variations.
 
 The complete instruction set is defined on *Chapter 19*, the lower two bits of
-the opcode (opcode[1:0]) are always set to 1. Important opcodes for our
-implementations are:
+the opcode (opcode[1:0]) are always set to 1.
 
-.. csv-table::
-	:header: "Opcode", "Instructions", "Instruction format"
-	:widths: 10, 30, 20
+The subset of RISC-V instruction used in this project, and its encoding, are on
+the following image:
 
-	"0000011", "LB, LH, LW", "I"
-	"0100011", "SB, SH, SW", "B"
-	"0010011", "ADDI, XORI, ORI, ANDI", "I"
-	"0110011", "ADD, SUB, XOR, OR, AND", "R"
-	"1100011", "JALR, BEQ, BNE, BLT, BGE", "SB"
+.. image:: paproc-instructions.png
+    :align: center
 
 Registers
 *********

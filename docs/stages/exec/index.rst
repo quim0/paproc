@@ -6,3 +6,4 @@ EXEC Stage
    :caption: Components:
 
    alu
+   alu_control
