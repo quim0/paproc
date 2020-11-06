@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ALU control &#8212; paproc  documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="ALU" href="alu.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="alu-control">
+<h1>ALU control<a class="headerlink" href="#alu-control" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/alu_control.svg" class="align-center" src="../../_images/alu_control.svg" /><p>The ALU control component generates the ALU control signal, that control what
+function the ALU performs. First of all, the instruction opcode is compressed
+from 6 to 4 bits to know the instruction format. This is done using the bits 6,
+5, 4, and 2 of the opcode.</p>
+<p>Only the top 5 bits are needed as inputs (<cite>opcode[6:2]</cite>), as the lowe two
+(<cite>opcode[1:0]</cite>) are always set to 1 according to the RISC-V specification.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 29%" />
+<col style="width: 43%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Opcode</p></th>
+<th class="head"><p>Compressed opcode</p></th>
+<th class="head"><p>Instr. type</p></th>
+<th class="head"><p>Instr. format</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0110011</p></td>
+<td><p>0110</p></td>
+<td><p>Arithmetic</p></td>
+<td><p>R</p></td>
+</tr>
+<tr class="row-odd"><td><p>0010011</p></td>
+<td><p>0010</p></td>
+<td><p>Arithmetic with immediate</p></td>
+<td><p>I</p></td>
+</tr>
+<tr class="row-even"><td><p>0000011</p></td>
+<td><p>0000</p></td>
+<td><p>Load</p></td>
+<td><p>I</p></td>
+</tr>
+<tr class="row-odd"><td><p>0100011</p></td>
+<td><p>0100</p></td>
+<td><p>Store</p></td>
+<td><p>S</p></td>
+</tr>
+<tr class="row-even"><td><p>1100011</p></td>
+<td><p>1100</p></td>
+<td><p>Conditional branch</p></td>
+<td><p>SB</p></td>
+</tr>
+<tr class="row-odd"><td><p>1101111</p></td>
+<td><p>1101</p></td>
+<td><p>Unconditional branch</p></td>
+<td><p>UJ</p></td>
+</tr>
+</tbody>
+</table>
+<p>With this information the ALU control knows how to decode the instruction. Then
+the field <code class="docutils literal notranslate"><span class="pre">func3</span></code> and the feld <code class="docutils literal notranslate"><span class="pre">func7</span></code> (in the case of I instructions) are
+used to determine the ALU function. The ALU function is generated using the 3
+bits of <code class="docutils literal notranslate"><span class="pre">func3</span></code>, with the top two bits of <code class="docutils literal notranslate"><span class="pre">func7</span></code> (<code class="docutils literal notranslate"><span class="pre">func7[6:5]</span></code>). In case
+of I instructions, the non-existent <code class="docutils literal notranslate"><span class="pre">func7</span></code> bits are set to 0.</p>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 15%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Instruction</p></th>
+<th class="head"><p>func3</p></th>
+<th class="head"><p>func7</p></th>
+<th class="head"><p>ALU function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ADD/ADDI</p></td>
+<td><p>000</p></td>
+<td><p>0000000</p></td>
+<td><p>00000</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUB</p></td>
+<td><p>000</p></td>
+<td><p>0100000</p></td>
+<td><p>00001</p></td>
+</tr>
+<tr class="row-even"><td><p>XOR/XORI</p></td>
+<td><p>100</p></td>
+<td><p>0000000</p></td>
+<td><p>10000</p></td>
+</tr>
+<tr class="row-odd"><td><p>OR/ORI</p></td>
+<td><p>110</p></td>
+<td><p>0000000</p></td>
+<td><p>11000</p></td>
+</tr>
+<tr class="row-even"><td><p>AND/ANDI</p></td>
+<td><p>111</p></td>
+<td><p>0000000</p></td>
+<td><p>11100</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">paproc</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Stages:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../fetch/index.html">FETCH Stage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../decode/index.html">DECODE Stage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">EXEC Stage</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="alu.html">ALU</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ALU control</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">EXEC Stage</a><ul>
+      <li>Previous: <a href="alu.html" title="previous chapter">ALU</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Quim Aguado.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.2.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/stages/exec/alu_control.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

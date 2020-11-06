@@ -53,43 +53,10 @@ memory access should raise an exception.</p>
 formats: R, I, S, and U (<em>Section 2.2</em>).</p>
 <img alt="../../_images/riscv-encoding.png" class="align-center" src="../../_images/riscv-encoding.png" />
 <p>The complete instruction set is defined on <em>Chapter 19</em>, the lower two bits of
-the opcode (opcode[1:0]) are always set to 1. Important opcodes for our
-implementations are:</p>
-<table class="colwidths-given docutils align-default">
-<colgroup>
-<col style="width: 17%" />
-<col style="width: 50%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Opcode</p></th>
-<th class="head"><p>Instructions</p></th>
-<th class="head"><p>Instruction format</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>0000011</p></td>
-<td><p>LB, LH, LW</p></td>
-<td><p>I</p></td>
-</tr>
-<tr class="row-odd"><td><p>0100011</p></td>
-<td><p>SB, SH, SW</p></td>
-<td><p>B</p></td>
-</tr>
-<tr class="row-even"><td><p>0010011</p></td>
-<td><p>ADDI, XORI, ORI, ANDI</p></td>
-<td><p>I</p></td>
-</tr>
-<tr class="row-odd"><td><p>0110011</p></td>
-<td><p>ADD, SUB, XOR, OR, AND</p></td>
-<td><p>R</p></td>
-</tr>
-<tr class="row-even"><td><p>1100011</p></td>
-<td><p>JALR, BEQ, BNE, BLT, BGE</p></td>
-<td><p>SB</p></td>
-</tr>
-</tbody>
-</table>
+the opcode (opcode[1:0]) are always set to 1.</p>
+<p>The subset of RISC-V instruction used in this project, and its encoding, are on
+the following image:</p>
+<img alt="../../_images/paproc-instructions.png" class="align-center" src="../../_images/paproc-instructions.png" />
 </div>
 <div class="section" id="registers">
 <h2>Registers<a class="headerlink" href="#registers" title="Permalink to this headline">¶</a></h2>
