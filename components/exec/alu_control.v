@@ -24,23 +24,23 @@ always @(*) begin
     case (compressed_op)
         R_TYPE_ARITHMETIC_OPCODE:
             begin
-                alu_op_control = {func3[2:0], func7[1:0]};
+                alu_op_control <= {func3[2:0], func7[1:0]};
             end
         I_TYPE_ARITHMETIC_OPCODE:
             begin
-                alu_op_control = {func3[2:0], 2'b00};
+                alu_op_control <= {func3[2:0], 2'b00};
             end
         BEQ_OPCODE:
             // TODO: BEQ really have to do a sub operation in ALU?, there's no
             // sub with immediate!!
             begin
                 // Sub operation
-                alu_op_control = 5'b00001;
+                alu_op_control <= 5'b00001;
             end
         LD_OPCODE, ST_OPCODE, JAL_OPCODE:
             begin
                 // Operation should be sum of register and imm
-                alu_op_control = 5'b00000;
+                alu_op_control <= 5'b00000;
             end
     endcase
 end
